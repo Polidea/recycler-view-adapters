@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/v_item_content_inset"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:showIn="@layout/item_top_content_inset"/>
