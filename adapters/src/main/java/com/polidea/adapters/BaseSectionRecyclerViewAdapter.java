@@ -97,7 +97,7 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
     @Override
     protected final int getDataViewLayoutResId(int dataPosition) {
         IndexPath indexPath = getIndexPathForDataPosition(dataPosition);
-        if (indexPath.row == IndexPath.SECTION_HEADER) {
+        if (indexPath.isSection()) {
             return getSectionHeaderLayoutResId(indexPath.section);
         } else {
             return getRowLayoutResId(indexPath);

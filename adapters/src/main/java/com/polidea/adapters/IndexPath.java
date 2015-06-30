@@ -6,9 +6,9 @@ public class IndexPath {
 
     public static final int SECTION_HEADER = -1;
 
-    public int section;
+    protected int section;
 
-    public int row;
+    protected int row;
 
     public IndexPath(int section, int row) {
         this.section = section;
@@ -19,21 +19,36 @@ public class IndexPath {
         return row == SECTION_HEADER;
     }
 
-    public boolean equals(IndexPath indexPath) {
-        return indexPath.row == row && indexPath.section == section;
+    public int getSection() {
+        return section;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof IndexPath) {
-            IndexPath indexPath = (IndexPath) o;
-            return equals(indexPath);
-        }
-        return super.equals(o);
+    public int getRow() {
+        return row;
     }
 
     @Override
     public String toString() {
         return "[" + "section=" + section + ", row=" + row + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        IndexPath indexPath = (IndexPath) o;
+        return section == indexPath.section && row == indexPath.row;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = section;
+        result = 31 * result + row;
+        return result;
     }
 }

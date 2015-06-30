@@ -38,7 +38,7 @@ public class SampleAdapter extends BaseSectionRecyclerViewAdapter {
 
     @Override
     protected long getRowItemViewId(IndexPath indexPath) {
-        return (indexPath.section + " " + indexPath.row).hashCode();
+        return (indexPath.getSection() + " " + indexPath.getRow()).hashCode();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class SampleAdapter extends BaseSectionRecyclerViewAdapter {
 
     @Override
     protected void onBindRowViewHolder(RecyclerView.ViewHolder holder, IndexPath indexPath) {
-        String data = sectionData.get(indexPath.section).get(indexPath.row);
+        String data = sectionData.get(indexPath.getSection()).get(indexPath.getRow());
 
         RowViewHolder rowViewHolder = (RowViewHolder) holder;
         rowViewHolder.textView.setText(data);

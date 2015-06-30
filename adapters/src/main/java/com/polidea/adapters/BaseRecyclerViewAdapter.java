@@ -138,11 +138,11 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     public final long getItemId(int position) {
         int itemViewType = getItemViewType(position);
         if (isTopContentInsetSet() && itemViewType == getTopContentInsetViewLayoutResId()) {
-            return "TOP_CONTENT_INSET_ROW".hashCode();
+            return C.TOP_CONTENT_INSET_ROW_ID;
         } else if (isInfiniteScrollingEnabled() && itemViewType == getInfiniteScrollingLayoutResId()) {
-            return "INFINITE_SCROLLING_ROW".hashCode();
+            return C.INFINITE_SCROLLING_ROW_ID;
         } else if (isBottomContentInsetSet() && itemViewType == getBottomContentInsetViewLayoutResId()) {
-            return "BOTTOM_CONTENT_INSET_ROW".hashCode();
+            return C.BOTTOM_CONTENT_INSET_ROW_ID;
         }
         return getDataItemViewId(getDataPosition(position));
     }

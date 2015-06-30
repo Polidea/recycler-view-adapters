@@ -1,9 +1,13 @@
 package com.polidea.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
+import android.view.ViewGroup
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
-public class RecyclerViewAdapter extends BaseRecyclerViewAdapter {
+public class RecyclerViewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
     public int dataCount;
 
@@ -25,9 +29,13 @@ public class RecyclerViewAdapter extends BaseRecyclerViewAdapter {
 
     public int bottomContentInsetViewLayoutResId;
 
+    Map<Integer, Long> dataItemViewIdMap = new HashMap<>();
+
     @Override
     public void setInfiniteScrollingEnabled(boolean enabled) {
-        infiniteScrollingEnabled = enabled;
+        def field = BaseRecyclerViewAdapter.class.getDeclaredField("infiniteScrollingEnabled")
+        field.setAccessible(true)
+        field.setBoolean(this, enabled)
     }
 
     @Override
@@ -66,5 +74,10 @@ public class RecyclerViewAdapter extends BaseRecyclerViewAdapter {
     @Override
     protected int getBottomContentInsetViewLayoutResId() {
         return bottomContentInsetViewLayoutResId;
+    }
+
+    @Override
+    protected long getDataItemViewId(int dataPosition) {
+        return dataItemViewIdMap.get(dataPosition);
     }
 }
