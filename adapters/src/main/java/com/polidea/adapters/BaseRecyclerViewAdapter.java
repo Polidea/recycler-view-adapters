@@ -90,12 +90,12 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
-        if (viewType == getInfiniteScrollingLayoutResId()) {
+        if (isInfiniteScrollingEnabled() && viewType == getInfiniteScrollingLayoutResId()) {
             View itemView = inflater.inflate(viewType, viewGroup, false);
             return createInfiniteScrollingHolder(itemView);
-        } else if (viewType == getTopContentInsetViewLayoutResId()) {
+        } else if (isTopContentInsetSet() && viewType == getTopContentInsetViewLayoutResId()) {
             return createContentInsetViewHolderForInset(viewGroup, viewType, inflater, topContentInset);
-        } else if (viewType == getBottomContentInsetViewLayoutResId()) {
+        } else if (isBottomContentInsetSet() && viewType == getBottomContentInsetViewLayoutResId()) {
             return createContentInsetViewHolderForInset(viewGroup, viewType, inflater, bottomContentInset);
         }
 
@@ -111,7 +111,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         }
 
         if (isInfiniteScrollingPosition(position)) {
-            infiniteScrollingListener.onLoadMore(this);
+            infiniteScrollingListener.onInfiniteScrollingLoadMore(this);
             bindInfiniteScrollingHolder(holder);
         } else if (!isTopContentInsetViewPosition(position) && !isBottomContentInsetViewPosition(position)) {
             VH viewHolder = (VH) holder;
@@ -123,11 +123,11 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     @Override
     public final int getItemViewType(int position) {
-        if (isInfiniteScrollingPosition(position)) {
+        if (isInfiniteScrollingEnabled() && isInfiniteScrollingPosition(position)) {
             return getInfiniteScrollingLayoutResId();
-        } else if (isTopContentInsetViewPosition(position)) {
+        } else if (isTopContentInsetSet() && isTopContentInsetViewPosition(position)) {
             return getTopContentInsetViewLayoutResId();
-        } else if (isBottomContentInsetViewPosition(position)) {
+        } else if (isBottomContentInsetSet() && isBottomContentInsetViewPosition(position)) {
             return getBottomContentInsetViewLayoutResId();
         } else {
             return getDataViewLayoutResId(getDataPosition(position));
@@ -137,11 +137,11 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     @Override
     public final long getItemId(int position) {
         int itemViewType = getItemViewType(position);
-        if (itemViewType == getTopContentInsetViewLayoutResId()) {
+        if (isTopContentInsetSet() && itemViewType == getTopContentInsetViewLayoutResId()) {
             return "TOP_CONTENT_INSET_ROW".hashCode();
-        } else if (itemViewType == getInfiniteScrollingLayoutResId()) {
+        } else if (isInfiniteScrollingEnabled() && itemViewType == getInfiniteScrollingLayoutResId()) {
             return "INFINITE_SCROLLING_ROW".hashCode();
-        } else if (itemViewType == getBottomContentInsetViewLayoutResId()) {
+        } else if (isBottomContentInsetSet() && itemViewType == getBottomContentInsetViewLayoutResId()) {
             return "BOTTOM_CONTENT_INSET_ROW".hashCode();
         }
         return getDataItemViewId(getDataPosition(position));
@@ -159,12 +159,12 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     @LayoutRes
     protected int getTopContentInsetViewLayoutResId() {
-        return R.layout.item_top_content_inset;
+        return R.layout.rva_item_top_content_inset;
     }
 
     @LayoutRes
     protected int getBottomContentInsetViewLayoutResId() {
-        return R.layout.item_bottom_content_inset;
+        return R.layout.rva_item_bottom_content_inset;
     }
 
     public final void notifyDataChanged(int dataPosition) {
@@ -196,7 +196,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     }
 
     protected RecyclerView.ViewHolder createInfiniteScrollingHolder(View itemView) {
-        throw new IllegalStateException("You must override createInfiniteScrollingHolder method when you are using infinite scrolling.");
+        return new EmptyViewHolder(itemView);
     }
 
     protected void bindInfiniteScrollingHolder(RecyclerView.ViewHolder holder) {
@@ -230,9 +230,9 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     boolean isFullSpanItemPosition(int position) {
         int itemViewType = getItemViewType(position);
-        return itemViewType == getTopContentInsetViewLayoutResId()
-                || itemViewType == getInfiniteScrollingLayoutResId()
-                || itemViewType == getBottomContentInsetViewLayoutResId();
+        return (isTopContentInsetSet() && itemViewType == getTopContentInsetViewLayoutResId())
+                || (isInfiniteScrollingEnabled() && itemViewType == getInfiniteScrollingLayoutResId())
+                || (isBottomContentInsetSet() && itemViewType == getBottomContentInsetViewLayoutResId());
     }
 
     void internalConfigureFullSpan(RecyclerView.ViewHolder holder) {

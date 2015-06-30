@@ -1,5 +1,6 @@
 package com.polidea.adapters;
 
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,13 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
 
     protected abstract int getRowCount(int section);
 
+    @LayoutRes
     protected abstract int getSectionHeaderLayoutResId(int section);
 
+    @LayoutRes
     protected abstract int getRowLayoutResId(IndexPath indexPath);
+
+    protected abstract RecyclerView.ViewHolder createHolderForLayoutResId(@LayoutRes int layoutResId, View itemView);
 
     protected abstract void onBindSectionHeaderViewHolder(RecyclerView.ViewHolder holder, int section);
 
@@ -76,11 +81,7 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
     protected final RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(viewType, parent, false);
-        return createHolderForLayout(viewType, itemView);
-    }
-
-    private RecyclerView.ViewHolder createHolderForLayout(int viewType, View itemView) {
-        return null;
+        return createHolderForLayoutResId(viewType, itemView);
     }
 
     @Override

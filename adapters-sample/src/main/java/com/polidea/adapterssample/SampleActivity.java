@@ -1,42 +1,52 @@
 package com.polidea.adapterssample;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.polidea.adapters.BaseRecyclerViewAdapter;
+import com.polidea.adapters.InfiniteScrollingListener;
 
-public class SampleActivity extends AppCompatActivity {
+public class SampleActivity extends AppCompatActivity implements InfiniteScrollingListener<RecyclerView.ViewHolder> {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+
+    private SampleAdapter adapter;
+
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
+
+        adapter = new SampleAdapter();
+        adapter.setInfiniteScrollingListener(this);
+        adapter.setTopContentInset(100);
+        adapter.setBottomContentInset(100);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setAdapter();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        addDataToAdapter();
+    }
+
+    private void addDataToAdapter() {
+        adapter.addNewSection();
+        adapter.setInfiniteScrollingEnabled(true);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sample, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onInfiniteScrollingLoadMore(BaseRecyclerViewAdapter<RecyclerView.ViewHolder> adapter) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                addDataToAdapter();
+            }
+        }, 1500);
     }
 }
