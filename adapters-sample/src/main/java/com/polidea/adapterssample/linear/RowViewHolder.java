@@ -1,4 +1,4 @@
-package com.polidea.adapterssample;
+package com.polidea.adapterssample.linear;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

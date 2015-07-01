@@ -1,4 +1,4 @@
-package com.polidea.adapterssample;
+package com.polidea.adapterssample.linear;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -6,10 +6,11 @@ import android.util.SparseArray;
 import android.view.View;
 import com.polidea.adapters.BaseSectionRecyclerViewAdapter;
 import com.polidea.adapters.IndexPath;
+import com.polidea.adapterssample.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SampleAdapter extends BaseSectionRecyclerViewAdapter {
+public class LinearAdapter extends BaseSectionRecyclerViewAdapter {
 
     private final SparseArray<List<String>> sectionData = new SparseArray<>();
 
