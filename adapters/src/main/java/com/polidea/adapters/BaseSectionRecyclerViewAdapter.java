@@ -3,12 +3,37 @@ package com.polidea.adapters;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 
+
+/**
+ * Adapter that adds sectioned data abstraction. It is very similar to iOS UITableView implementation.
+ * <p/>
+ * It perfectly fits when you need to show list of items that are separated to item groups that contains random number of items.
+ * Adapter calls those groups as section and items in that section are named rows.
+ * <p/>
+ * Each row position is described by IndexPath which contains section number & row number in that section.
+ * <p/>
+ * In addition each section can have it's header view.
+ */
 public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
+    /**
+     * Does specified section has header
+     *
+     * @param section Section number
+     * @return Boolean that indicated if specified section has header
+     */
     protected abstract boolean hasSectionHeader(int section);
 
+    /**
+     * Get section count
+     *
+     * @return Section count
+     */
     protected abstract int getSectionCount();
 
+    /**
+     * Get row count for specified section
+     */
     protected abstract int getRowCount(int section);
 
     @LayoutRes
@@ -21,6 +46,9 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
 
     protected abstract void onBindRowViewHolder(RecyclerView.ViewHolder holder, IndexPath indexPath);
 
+    /**
+     * Get IndexPath for specified dataPosition
+     */
     public IndexPath getIndexPathForDataPosition(int dataPosition) {
         int rows = 0;
         int section;
@@ -41,6 +69,9 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
         return new IndexPath(section, dataPosition - rows);
     }
 
+    /**
+     * Get dataPosition for IndexPath
+     */
     public int getDataPositionForIndexPath(IndexPath indexPath) {
         if (indexPath.section >= getSectionCount() || indexPath.row >= getRowCount(indexPath.section)) {
             return RecyclerView.NO_POSITION;
@@ -93,11 +124,11 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
     }
 
     @Override
-    protected void configureFullSpanIfNeeded(RecyclerView.ViewHolder holder, int dataPosition) {
-        super.configureFullSpanIfNeeded(holder, dataPosition);
+    protected void configureSpanIfNeeded(RecyclerView.ViewHolder holder, int dataPosition) {
+        super.configureSpanIfNeeded(holder, dataPosition);
 
         IndexPath indexPath = getIndexPathForDataPosition(dataPosition);
-        if(indexPath.isSection()) {
+        if (indexPath.isSection()) {
             internalConfigureFullSpan(holder);
         }
     }
@@ -112,10 +143,16 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
         }
     }
 
+    /**
+     * Get item view id for specified section header
+     */
     protected long getSectionItemViewId(int section) {
         return C.NO_ID;
     }
 
+    /**
+     * Get item view id for specified indexPath
+     */
     protected long getRowItemViewId(IndexPath indexPath) {
         return C.NO_ID;
     }

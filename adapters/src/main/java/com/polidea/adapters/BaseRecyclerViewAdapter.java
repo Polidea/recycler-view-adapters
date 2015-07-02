@@ -8,14 +8,56 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * Extended RecyclerViewAdapter that contains few new features:
+ * <ul>
+ * <li>Infinite scrolling - it adds new item at the end of recycler view items.
+ * To use this set listener via (@see setInfiniteScrollingListener(InfiniteScrollingListener)) and enable/disable infinite scrolling by calling (@see setInfiniteScrollingEnabled(enabled)
+ * When user scrolls to end of the list adapter call (@see InfiniteScrollingListener.onInfiniteScrollingLoadMore(BaseRecyclerViewAdapter))</li>
+ * <li>Top content inset - it adds new item at begin of recycle view items with specified height (in pixels)</li>
+ * <li>Bottom content inset - it adds new item at end of recycle view items (after infinite scrolling item) with specified height (in pixels)</li>
+ * </ul>
+ * <p/>
+ * Those features adds new items (it is especially important when we add top content inset), so to make position again 0-indexed it provide new dataPosition. Please use it for binding your data to adapter
+ * <p/>
+ * It adds also new notify methods for using with dataPosition.
+ * <p/>
+ * It uses resource id's for item view type
+ *
+ * @param <VH> Default ViewHolder class
+ */
 public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    /**
+     * Returns total number of your data items
+     *
+     * @return Total number of your data items
+     */
     protected abstract int getDataCount();
 
+    /**
+     * Creating view holder for specified layoutResId (view type)
+     *
+     * @param layoutResId Layout resource is for which to create view holder
+     * @param itemView    View that is inflated from layoutResId
+     * @return View holder for specified layoutResId
+     */
     protected abstract VH createHolderForLayoutResId(@LayoutRes int layoutResId, View itemView);
 
+    /**
+     * Here you should bind your data to holder
+     *
+     * @param holder       Holder that was previously created in (@see createHolderForLayoutResId(int, View))
+     * @param dataPosition Data position
+     */
     protected abstract void onBindDataViewHolder(VH holder, int dataPosition);
 
+    /**
+     * Get layout resource id that should be used for specified dataPosition
+     *
+     * @param dataPosition Data position
+     * @return Layout resource id
+     */
     @LayoutRes
     protected abstract int getDataViewLayoutResId(int dataPosition);
 
@@ -33,6 +75,12 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         return topContentInset;
     }
 
+    /**
+     * Adds new item at begin of recycle view items.
+     * Please call it before first data refresh on adapter happen. If you want to call it after this, remember to call (@see notifyDataSetChanged())
+     *
+     * @param topContentInset Top content inset in px
+     */
     public void setTopContentInset(int topContentInset) {
         this.topContentInset = topContentInset;
     }
@@ -45,6 +93,12 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         return bottomContentInset;
     }
 
+    /**
+     * Adds new item at end of recycle view items.
+     * Please call it before first data refresh on adapter happen. If you want to call it after this, remember to call (@see notifyDataSetChanged())
+     *
+     * @param bottomContentInset Bottom content inset in px
+     */
     public void setBottomContentInset(int bottomContentInset) {
         this.bottomContentInset = bottomContentInset;
     }
@@ -53,6 +107,11 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         return bottomContentInset != C.NO_VALUE;
     }
 
+    /**
+     * Adds/Removes item at end of recycle view items. Enable this when you have still some data to fetch and disable when there is no data to fetch.
+     *
+     * @param enabled
+     */
     public void setInfiniteScrollingEnabled(boolean enabled) {
         if (enabled == this.infiniteScrollingEnabled) {
             return;
@@ -74,14 +133,31 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         return infiniteScrollingEnabled;
     }
 
+    /**
+     * Sets inifite scrolling listener that informs about moving to end of the list. In that case you should fetch next portion of data
+     *
+     * @param infiniteScrollingListener
+     */
     public void setInfiniteScrollingListener(@NonNull InfiniteScrollingListener<VH> infiniteScrollingListener) {
         this.infiniteScrollingListener = infiniteScrollingListener;
     }
 
+    /**
+     * Get 0-indexed data position that should be used in your adapter
+     *
+     * @param adapterPosition Real position of item in adapter
+     * @return 0-indexed data position
+     */
     public int getDataPosition(int adapterPosition) {
         return isTopContentInsetSet() ? adapterPosition - 1 : adapterPosition;
     }
 
+    /**
+     * Get real position of item in adapter
+     *
+     * @param dataPosition Data position
+     * @return Real position in adapter
+     */
     public int getAdapterPosition(int dataPosition) {
         return isTopContentInsetSet() ? dataPosition + 1 : dataPosition;
     }
@@ -116,7 +192,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
             bindInfiniteScrollingHolder(holder);
         } else if (!isTopContentInsetViewPosition(position) && !isBottomContentInsetViewPosition(position)) {
             VH viewHolder = (VH) holder;
-            configureFullSpanIfNeeded(viewHolder, dataPosition);
+            configureSpanIfNeeded(viewHolder, dataPosition);
 
             onBindDataViewHolder(viewHolder, dataPosition);
         }
@@ -153,6 +229,11 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         return getDataCount() + (infiniteScrollingEnabled ? 1 : 0) + (isTopContentInsetSet() ? 1 : 0) + (isBottomContentInsetSet() ? 1 : 0);
     }
 
+    /**
+     * This method must be overriden when using infinite scrolling
+     *
+     * @return Layout res id for infinite scrolling item
+     */
     @LayoutRes
     protected int getInfiniteScrollingLayoutResId() {
         throw new IllegalStateException("You must override getInfiniteScrollingLayoutResId method when you are using infinite scrolling.");
@@ -204,10 +285,21 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     }
 
-    protected void configureFullSpanIfNeeded(VH holder, int dataPosition) {
+    /**
+     * Configure span for specified dataPosition.
+     * It should be only used when using StaggeredGridLayoutManager.
+     * GridLayoutManager contains own methods for setting span size for specified position.
+     */
+    protected void configureSpanIfNeeded(VH holder, int dataPosition) {
 
     }
 
+    /**
+     * Get item view id for specified dataPosition
+     *
+     * @param dataPosition Data position
+     * @return Id of item view
+     */
     protected long getDataItemViewId(int dataPosition) {
         return C.NO_ID;
     }

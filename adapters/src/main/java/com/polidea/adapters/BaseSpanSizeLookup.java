@@ -2,6 +2,9 @@ package com.polidea.adapters;
 
 import android.support.v7.widget.GridLayoutManager;
 
+/**
+ * You must use this when using GridLayoutManger with BaseRecyclerViewAdapter
+ */
 public abstract class BaseSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
 
     protected abstract int getDataSpanSize(int dataPosition);

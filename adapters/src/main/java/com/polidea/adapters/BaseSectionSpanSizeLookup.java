@@ -1,5 +1,8 @@
 package com.polidea.adapters;
 
+/**
+ * You must use this when using GridLayoutManger with BaseSectionRecyclerViewAdapter
+ */
 public abstract class BaseSectionSpanSizeLookup extends BaseSpanSizeLookup {
 
     protected abstract int getRowSpanSize(IndexPath indexPath);
