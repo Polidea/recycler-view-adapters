@@ -1,11 +1,8 @@
-package com.polidea.adapters;
+package com.polidea.adapters
 
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import android.support.annotation.LayoutRes;
+import android.support.v7.widget.RecyclerView
+import android.view.View
 
 public class RecyclerViewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
@@ -13,9 +10,9 @@ public class RecyclerViewAdapter extends BaseRecyclerViewAdapter<RecyclerView.Vi
 
     boolean dataCoundCalled;
 
-    RecyclerView.ViewHolder createDataViewHolder;
+    RecyclerView.ViewHolder createHolder;
 
-    boolean onCreateDataViewHolderCalled;
+    boolean onCreateHolderCalled;
 
     boolean onBindDataViewHolderCalled;
 
@@ -45,9 +42,9 @@ public class RecyclerViewAdapter extends BaseRecyclerViewAdapter<RecyclerView.Vi
     }
 
     @Override
-    protected RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        onCreateDataViewHolderCalled = true;
-        return createDataViewHolder;
+    protected RecyclerView.ViewHolder createHolderForLayoutResId(@LayoutRes int layoutResId, View itemView) {
+        onCreateHolderCalled = true;
+        return createHolder;
     }
 
     @Override

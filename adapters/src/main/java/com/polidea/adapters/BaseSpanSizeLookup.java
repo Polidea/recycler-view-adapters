@@ -19,4 +19,12 @@ public abstract class BaseSpanSizeLookup extends GridLayoutManager.SpanSizeLooku
     public final int getSpanSize(int position) {
         return adapter.isFullSpanItemPosition(position) ? fullSpanSize : getDataSpanSize(adapter.getDataPosition(position));
     }
+
+    public BaseRecyclerViewAdapter getAdapter() {
+        return adapter;
+    }
+
+    public int getFullSpanSize() {
+        return fullSpanSize;
+    }
 }

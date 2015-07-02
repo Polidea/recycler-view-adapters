@@ -60,4 +60,12 @@ public abstract class BaseFragment<ADAPTER extends BaseRecyclerViewAdapter> exte
             }
         }, 1500);
     }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public ADAPTER getAdapter() {
+        return adapter;
+    }
 }

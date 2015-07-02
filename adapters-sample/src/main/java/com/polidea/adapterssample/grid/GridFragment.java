@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.polidea.adapters.BaseSpanSizeLookup;
 import com.polidea.adapterssample.BaseFragment;
 import com.polidea.adapterssample.R;
 
@@ -25,12 +26,23 @@ public class GridFragment extends BaseFragment<GridAdapter> {
 
     @Override
     protected void onConfigureRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        final int fullSpanSize = 2;
+        final int defaultSpanSize = 1;
+
+        GridLayoutManager layout = new GridLayoutManager(getActivity(), fullSpanSize);
+        layout.setSpanSizeLookup(new BaseSpanSizeLookup(getAdapter(), fullSpanSize) {
+            @Override
+            protected int getDataSpanSize(int dataPosition) {
+                return defaultSpanSize;
+            }
+        });
+        recyclerView.setLayoutManager(layout);
     }
 
     @Override
     protected void onConfigureAdapter(GridAdapter adapter) {
-
+        adapter.setTopContentInset(200);
+        adapter.setBottomContentInset(400);
     }
 
     @Override

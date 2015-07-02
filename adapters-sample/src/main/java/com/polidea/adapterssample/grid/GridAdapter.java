@@ -1,28 +1,38 @@
 package com.polidea.adapterssample.grid;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
+import android.support.annotation.LayoutRes;
+import android.view.View;
 import com.polidea.adapters.BaseRecyclerViewAdapter;
+import com.polidea.adapterssample.R;
+import com.polidea.adapterssample.RowViewHolder;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GridAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder>{
+public class GridAdapter extends BaseRecyclerViewAdapter<RowViewHolder>{
+
+    List<String> stringList = new ArrayList<String>() {{
+        for (int i = 0; i < 100; i++) {
+            add("Row " + i);
+        }
+    }};
 
     @Override
     protected int getDataCount() {
-        return 0;
+        return stringList.size();
     }
 
     @Override
-    protected RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    protected RowViewHolder createHolderForLayoutResId(@LayoutRes int layoutResId, View itemView) {
+        return new RowViewHolder(itemView);
     }
 
     @Override
-    protected void onBindDataViewHolder(RecyclerView.ViewHolder holder, int dataPosition) {
-
+    protected void onBindDataViewHolder(RowViewHolder holder, int dataPosition) {
+        holder.textView.setText(stringList.get(dataPosition));
     }
 
     @Override
     protected int getDataViewLayoutResId(int dataPosition) {
-        return 0;
+        return R.layout.item_row;
     }
 }

@@ -2,9 +2,6 @@ package com.polidea.adapters;
 
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAdapter<RecyclerView.ViewHolder> {
 
@@ -19,8 +16,6 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
 
     @LayoutRes
     protected abstract int getRowLayoutResId(IndexPath indexPath);
-
-    protected abstract RecyclerView.ViewHolder createHolderForLayoutResId(@LayoutRes int layoutResId, View itemView);
 
     protected abstract void onBindSectionHeaderViewHolder(RecyclerView.ViewHolder holder, int section);
 
@@ -78,13 +73,6 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
     }
 
     @Override
-    protected final RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(viewType, parent, false);
-        return createHolderForLayoutResId(viewType, itemView);
-    }
-
-    @Override
     protected final void onBindDataViewHolder(RecyclerView.ViewHolder holder, int dataPosition) {
         IndexPath indexPath = getIndexPathForDataPosition(dataPosition);
         if (indexPath.row == IndexPath.SECTION_HEADER) {
@@ -101,6 +89,16 @@ public abstract class BaseSectionRecyclerViewAdapter extends BaseRecyclerViewAda
             return getSectionHeaderLayoutResId(indexPath.section);
         } else {
             return getRowLayoutResId(indexPath);
+        }
+    }
+
+    @Override
+    protected void configureFullSpanIfNeeded(RecyclerView.ViewHolder holder, int dataPosition) {
+        super.configureFullSpanIfNeeded(holder, dataPosition);
+
+        IndexPath indexPath = getIndexPathForDataPosition(dataPosition);
+        if(indexPath.isSection()) {
+            internalConfigureFullSpan(holder);
         }
     }
 

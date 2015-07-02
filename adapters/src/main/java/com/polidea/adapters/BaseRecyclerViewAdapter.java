@@ -12,7 +12,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     protected abstract int getDataCount();
 
-    protected abstract VH onCreateDataViewHolder(ViewGroup parent, int viewType);
+    protected abstract VH createHolderForLayoutResId(@LayoutRes int layoutResId, View itemView);
 
     protected abstract void onBindDataViewHolder(VH holder, int dataPosition);
 
@@ -99,7 +99,8 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
             return createContentInsetViewHolderForInset(viewGroup, viewType, inflater, bottomContentInset);
         }
 
-        return onCreateDataViewHolder(viewGroup, viewType);
+        View itemView = inflater.inflate(viewType, viewGroup, false);
+        return createHolderForLayoutResId(viewType, itemView);
     }
 
     @Override
@@ -203,7 +204,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     }
 
-    protected void configureFullSpanIfNeeded(VH holder, int position) {
+    protected void configureFullSpanIfNeeded(VH holder, int dataPosition) {
 
     }
 

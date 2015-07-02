@@ -6,7 +6,9 @@ import android.util.SparseArray;
 import android.view.View;
 import com.polidea.adapters.BaseSectionRecyclerViewAdapter;
 import com.polidea.adapters.IndexPath;
+import com.polidea.adapterssample.HeaderViewHolder;
 import com.polidea.adapterssample.R;
+import com.polidea.adapterssample.RowViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
