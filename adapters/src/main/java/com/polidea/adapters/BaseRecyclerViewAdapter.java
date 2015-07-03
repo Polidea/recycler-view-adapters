@@ -69,7 +69,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
 
     InfiniteScrollingListener<VH> infiniteScrollingListener = InfiniteScrollingListener.NULL;
 
-    InfiniteDataObserver infiniteDataObserver;
+    InfiniteScrollingDataObserver infiniteDataObserver;
 
     public int getTopContentInset() {
         return topContentInset;
@@ -119,7 +119,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         int lastPosition = getLastPosition();
         this.infiniteScrollingEnabled = enabled;
         if (enabled) {
-            infiniteDataObserver = new InfiniteDataObserver(this);
+            infiniteDataObserver = new InfiniteScrollingDataObserver(infiniteScrollingDelegate, infiniteScrollingProvider);
             registerAdapterDataObserver(infiniteDataObserver);
             notifyItemInserted(lastPosition);
         } else {
@@ -165,17 +165,16 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+        View itemView = inflater.inflate(viewType, viewGroup, false);
 
         if (isInfiniteScrollingEnabled() && viewType == getInfiniteScrollingLayoutResId()) {
-            View itemView = inflater.inflate(viewType, viewGroup, false);
             return createInfiniteScrollingHolder(itemView);
         } else if (isTopContentInsetSet() && viewType == getTopContentInsetViewLayoutResId()) {
-            return createContentInsetViewHolderForInset(viewGroup, viewType, inflater, topContentInset);
+            return createContentInsetViewHolderForInset(itemView, topContentInset);
         } else if (isBottomContentInsetSet() && viewType == getBottomContentInsetViewLayoutResId()) {
-            return createContentInsetViewHolderForInset(viewGroup, viewType, inflater, bottomContentInset);
+            return createContentInsetViewHolderForInset(itemView, bottomContentInset);
         }
 
-        View itemView = inflater.inflate(viewType, viewGroup, false);
         return createHolderForLayoutResId(viewType, itemView);
     }
 
@@ -309,12 +308,8 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     }
 
     boolean isInfiniteScrollingPosition(int position) {
-        boolean bottomContentInsetSet = isBottomContentInsetSet();
-        int lastPosition = getLastPosition();
-        if (bottomContentInsetSet) {
-            lastPosition--;
-        }
-        return infiniteScrollingEnabled && position == lastPosition;
+        int infiniteScrollingPosition = getInfiniteScrollingPosition();
+        return infiniteScrollingEnabled && position == infiniteScrollingPosition;
     }
 
     boolean isTopContentInsetViewPosition(int position) {
@@ -340,8 +335,7 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         }
     }
 
-    RecyclerView.ViewHolder createContentInsetViewHolderForInset(ViewGroup viewGroup, int viewType, LayoutInflater inflater, int contentInset) {
-        ViewGroup itemView = (ViewGroup) inflater.inflate(viewType, viewGroup, false);
+    RecyclerView.ViewHolder createContentInsetViewHolderForInset(View itemView, int contentInset) {
         View contentInsetView = itemView.findViewById(R.id.v_item_content_inset);
         ViewGroup.LayoutParams layoutParams = contentInsetView.getLayoutParams();
         layoutParams.height = contentInset;
@@ -352,4 +346,27 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     int getLastPosition() {
         return getItemCount() - 1;
     }
+
+    int getInfiniteScrollingPosition() {
+        boolean bottomContentInsetSet = isBottomContentInsetSet();
+        int infiniteScrollingPosition = getLastPosition();
+        if (bottomContentInsetSet) {
+            infiniteScrollingPosition--;
+        }
+        return infiniteScrollingPosition;
+    }
+
+    InfiniteScrollingDataObserver.Delegate infiniteScrollingDelegate = new InfiniteScrollingDataObserver.Delegate() {
+        @Override
+        public void refreshInfiniteScrollingItem() {
+            notifyItemChanged(getInfiniteScrollingPosition());
+        }
+    };
+
+    InfiniteScrollingDataObserver.Provider infiniteScrollingProvider = new InfiniteScrollingDataObserver.Provider() {
+        @Override
+        public int getInfiniteScrollingPosition() {
+            return BaseRecyclerViewAdapter.this.getInfiniteScrollingPosition();
+        }
+    };
 }
