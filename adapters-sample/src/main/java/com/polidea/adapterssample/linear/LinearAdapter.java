@@ -4,7 +4,7 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
-import com.polidea.adapters.BaseSectionRecyclerViewAdapter;
+import com.polidea.adapters.BaseStickySectionRecyclerViewAdapter;
 import com.polidea.adapters.IndexPath;
 import com.polidea.adapterssample.HeaderViewHolder;
 import com.polidea.adapterssample.R;
@@ -12,26 +12,28 @@ import com.polidea.adapterssample.RowViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinearAdapter extends BaseSectionRecyclerViewAdapter {
+public class LinearAdapter extends BaseStickySectionRecyclerViewAdapter {
 
     private final SparseArray<List<String>> sectionData = new SparseArray<>();
-
-    private final SparseArray<Boolean> sectionHeaderData = new SparseArray<>();
 
     public void addNewSection() {
         int section = sectionData.size();
 
         List<String> rowList = sectionData.get(section);
-        if(rowList == null) {
+        if (rowList == null) {
             rowList = new ArrayList<>();
             sectionData.append(section, rowList);
         }
         for (int row = 0; row < 20; row++) {
             rowList.add("Section: " + section + ", Row: " + row);
         }
-        sectionHeaderData.put(section, section % 2 == 0);
 
         notifyDataSetChanged();
+    }
+
+    @Override
+    protected int getSectionHeaderLayoutResId() {
+        return R.layout.item_header;
     }
 
     @Override
@@ -45,11 +47,6 @@ public class LinearAdapter extends BaseSectionRecyclerViewAdapter {
     }
 
     @Override
-    protected boolean hasSectionHeader(int section) {
-        return sectionHeaderData.get(section);
-    }
-
-    @Override
     protected int getSectionCount() {
         return sectionData.size();
     }
@@ -57,11 +54,6 @@ public class LinearAdapter extends BaseSectionRecyclerViewAdapter {
     @Override
     protected int getRowCount(int section) {
         return sectionData.get(section).size();
-    }
-
-    @Override
-    protected int getSectionHeaderLayoutResId(int section) {
-        return R.layout.item_header;
     }
 
     @Override

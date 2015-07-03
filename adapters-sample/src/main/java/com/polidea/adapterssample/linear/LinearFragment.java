@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.polidea.adapterssample.BaseFragment;
 import com.polidea.adapterssample.R;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 public class LinearFragment extends BaseFragment<LinearAdapter> {
 
@@ -26,6 +27,7 @@ public class LinearFragment extends BaseFragment<LinearAdapter> {
     @Override
     protected void onConfigureRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        getAdapter().configureStickyHeaderDecoration(recyclerView, new StickyRecyclerHeadersDecoration(getAdapter()));
     }
 
     @Override

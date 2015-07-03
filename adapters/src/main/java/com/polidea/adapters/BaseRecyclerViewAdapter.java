@@ -304,6 +304,10 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
         return C.NO_ID;
     }
 
+    protected boolean isCorrectDataPosition(int dataPosition) {
+        return dataPosition >= 0 && dataPosition < getDataCount();
+    }
+
     boolean isInfiniteScrollingPosition(int position) {
         boolean bottomContentInsetSet = isBottomContentInsetSet();
         int lastPosition = getLastPosition();
