@@ -63,7 +63,7 @@ Extended `RecyclerView.Adapter` that contains few new features:
 
 Create your own Adapter class that extends `BaseRecyclerViewAdapter`, example:
 
-```
+```java
 public class Adapter extends BaseRecyclerViewAdapter<RowViewHolder>{
 
     @Override
@@ -105,7 +105,7 @@ public class Adapter extends BaseRecyclerViewAdapter<RowViewHolder>{
 
 To configure topContentInset, bottomContentInset and infiniteScrolling call:
 
-```
+```java
 	adapter.setTopContentInset(topContentInset);
 	adapter.setBottomContentInset(bottomContentInset);
 	adapter.setInfiniteScrollingListener(new InfiniteScrollingListener() {
@@ -119,7 +119,7 @@ To configure topContentInset, bottomContentInset and infiniteScrolling call:
 
 Remember to set `BaseSpanSizeLookup` for GridLayoutManager (it is needed to make infinity, top inset & bottom inset views to be full spaned).
 
-```
+```java
 	GridLayoutManager layout = new GridLayoutManager(getActivity(), fullSpanSize);
 	layout.setSpanSizeLookup(new BaseSpanSizeLookup(getAdapter(), fullSpanSize) {
 		@Override
@@ -140,7 +140,7 @@ Extended `BaseRecyclerViewAdapter` that adds abstraction for grouping items in s
 
 Create your own Adapter class that extends BaseSectionRecyclerViewAdapter, example:
 
-```
+```java
 public class SectionAdapter extends BaseSectionRecyclerViewAdapter {
 
     @Override
@@ -199,7 +199,7 @@ public class SectionAdapter extends BaseSectionRecyclerViewAdapter {
 Extended `BaseSectionRecyclerViewAdapter` that uses [sticky-headers-recyclerview](https://github.com/timehop/sticky-headers-recyclerview) library to show sticky headers. <p/>
 Create your own adapter that extends `BaseStickySectionRecyclerViewAdapter`, example:
 
-```
+```java
 public class StickyHeadersAdapter extends BaseStickySectionRecyclerViewAdapter {
 
 	@Override
@@ -256,7 +256,7 @@ public class StickyHeadersAdapter extends BaseStickySectionRecyclerViewAdapter {
 
 Remember to call `configureStickyHeaderDecoration` method, with created `StickyRecyclerHeadersDecoration` parameter, on adapter:
 
-```
+```java
 adapter.configureStickyHeaderDecoration(recyclerView, new StickyRecyclerHeadersDecoration(adapter));
 recyclerView.setAdapter(adapter);
 ```
