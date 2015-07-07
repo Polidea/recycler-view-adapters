@@ -215,8 +215,7 @@ public class StickyHeadersAdapter extends BaseStickySectionRecyclerViewAdapter {
 Remember to call `configureStickyHeaderDecoration` method, with created `StickyRecyclerHeadersDecoration` parameter, on adapter:
 
 ```
-recyclerView = ...
-adapter.configureStickyHeaderDecoration(recyclerView, new StickyRecyclerHeadersDecoration(getAdapter()));
+adapter.configureStickyHeaderDecoration(recyclerView, new StickyRecyclerHeadersDecoration(adapter));
 recyclerView.setAdapter(adapter);
 ```
 
