@@ -1,19 +1,37 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'groovyx.grooid.groovy-android'
+apply plugin: 'android-maven'
+apply plugin: 'signing'
+
+def console = System.console()
+
+group = 'com.polidea'
 
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.0 rc2"
 
+    signingConfigs {
+        adaptersConfig {
+            storeFile file("${rootDir}/dev_tools/adapters.keystore")
+            storePassword console ? console.readLine("\nKeystore password: ") : ""
+            keyAlias console ? console.readLine("\nAlias: ") : ""
+            keyPassword console ? console.readLine("\nKey password: ") : ""
+        }
+    }
+
+
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName version
     }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig android.signingConfigs.adaptersConfig
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,6 +39,72 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+// Set up for Sonatype OSS repository
+def isReleaseVersion = !version.endsWith('SNAPSHOT')
+
+def siteUrl = 'https://github.com/Polidea/recycler-view-adapters'      // Homepage URL of the library
+def gitUrl = 'https://github.com/Polidea/recycler-view-adapters.git'   // Git repository URL
+
+signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask(':uploadArchives') }
+
+    sign configurations.archives
+}
+
+def uploadUsername = console ? console.readLine("\nUpload username: ") : ''
+def uploadPassword = console ? console.readLine("\nUpload password: ") : ''
+
+def artifactId = 'adapters'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment ->
+            if (isReleaseVersion) {
+                signing.signPom(deployment)
+            }
+        }
+
+        snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+            authentication(userName: uploadUsername, password: uploadPassword)
+        }
+
+        repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+            authentication(userName: uploadUsername, password: uploadPassword)
+        }
+
+        pom.artifactId = artifactId
+
+        pom.project {
+            name 'recycler-view-adapters'
+            packaging 'aar'
+            description 'A set of RecyclerView adapters, that are adding some great new features.'
+            url 'https://github.com/Polidea/recycler-view-adapters'
+
+            scm {
+                url 'scm:git@github.com:Polidea/recycler-view-adapters.git'
+                connection 'scm:git@github.com:Polidea/recycler-view-adapters.git'
+                developerConnection 'scm:git@github.com:Polidea/recycler-view-adapters.git'
+            }
+
+            licenses {
+                license {
+                    name 'The MIT License (MIT)'
+                    url 'https://github.com/Polidea/recycler-view-adapters/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'Polidea-Dev'
+                    email 'it@polidea.com'
+                    name 'Polidea'
+                }
+            }
+        }
     }
 }
 

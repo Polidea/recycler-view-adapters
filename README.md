@@ -7,7 +7,49 @@ Demo using `BaseStickySectionRecyclerViewAdapter`
 ![animated gif demo](./sample.gif)
 
 ## Download
-//todo
+
+Via gradle. In main build.gradle :
+
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+}
+```
+
+Add library:
+
+```gradle
+compile 'com.polidea:adapters:1.0.0-SNAPSHOT@aar'
+```
+
+or Maven. Add plugin repository:
+
+```xml
+<pluginRepository>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
+</pluginRepository>
+```
+
+Add library:
+
+```xml
+<dependency>
+  <groupId>com.polidea</groupId>
+  <artifactId>adapters</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>aar</packaging>
+</dependency>
+```
+
+**It is a stable version of library**
 
 ### BaseRecyclerViewAdapter
 
