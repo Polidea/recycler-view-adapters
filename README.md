@@ -13,8 +13,9 @@ Demo using `BaseStickySectionRecyclerViewAdapter`
 
 Extended `RecyclerView.Adapter` that contains few new features:
 
-- Infinite scrolling - it adds new item at the end of recycler view items and informs when user scroll down to that item.
-- Top & Bottom content insets - it adds new items to begin & end  of recycle view items with specified height
+- Infinite scrolling - Adds loading spinner at the end of the list and informs when user reaches the last adapter item.
+- Bottom content inset - Adds an empty item with specified height at the beginning and at the end of the list
+- Top content inset - Adds an empty item with specified height at the beginning and at the begin of the list
 
 #### Usage
 
@@ -47,10 +48,20 @@ public class Adapter extends BaseRecyclerViewAdapter<RowViewHolder>{
     protected int getInfiniteScrollingLayoutResId() {
         return R.layout.item_infinite_scrolling;
     }
+
+    public static class RowViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView textView;
+
+        public RowViewHolder(View itemView) {
+            super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.text_view);
+        }
+    }
 }
 ```
 
-To configure topContetnInset, bottomContentInset and infinitiLoading call:
+To configure topContentInset, bottomContentInset and infiniteScrolling call:
 
 ```
 	adapter.setTopContentInset(topContentInset);
@@ -77,7 +88,7 @@ Remember to set `BaseSpanSizeLookup` for GridLayoutManager (it is needed to make
 	recyclerView.setLayoutManager(layout);
 ```
 
-You don't have to do anything with StaggeredGridLayoutManager. Adapters handle spans itself.
+You don't have to do anything with StaggeredGridLayoutManager. `BaseRecyclerViewAdapter` handle spans itself.
 
 ### BaseSectionRecyclerViewAdapter
 
@@ -204,14 +215,16 @@ public class StickyHeadersAdapter extends BaseStickySectionRecyclerViewAdapter {
 Remember to call `configureStickyHeaderDecoration` method, with created `StickyRecyclerHeadersDecoration` parameter, on adapter:
 
 ```
+recyclerView = ...
 adapter.configureStickyHeaderDecoration(recyclerView, new StickyRecyclerHeadersDecoration(getAdapter()));
+recyclerView.setAdapter(adapter);
 ```
 
 ## Used libraries
 
-* **[sticky-headers-recyclerview]** https://github.com/timehop/sticky-headers-recyclerview* 
+* **[sticky-headers-recyclerview]** https://github.com/timehop/sticky-headers-recyclerview
 * **[spock]** https://code.google.com/p/spock/
-* **[android support library v4 v7]**
+* **[android support library v4 v7]** http://developer.android.com/tools/support-library/index.html
 
 ## LICENSE
 

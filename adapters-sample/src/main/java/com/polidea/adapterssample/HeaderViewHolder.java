@@ -6,10 +6,10 @@ import android.widget.TextView;
 
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView textView;
+    public TextView titleTextView;
 
     public HeaderViewHolder(View itemView) {
         super(itemView);
-        textView = (TextView) itemView;
+        titleTextView = (TextView) itemView;
     }
 }

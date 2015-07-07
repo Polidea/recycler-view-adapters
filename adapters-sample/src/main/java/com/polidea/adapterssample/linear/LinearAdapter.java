@@ -80,7 +80,7 @@ public class LinearAdapter extends BaseStickySectionRecyclerViewAdapter {
     @Override
     protected void onBindSectionHeaderViewHolder(RecyclerView.ViewHolder holder, int section) {
         HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-        headerViewHolder.textView.setText("Section " + section);
+        headerViewHolder.titleTextView.setText("Section " + section);
     }
 
     @Override
@@ -88,6 +88,6 @@ public class LinearAdapter extends BaseStickySectionRecyclerViewAdapter {
         String data = sectionData.get(indexPath.getSection()).get(indexPath.getRow());
 
         RowViewHolder rowViewHolder = (RowViewHolder) holder;
-        rowViewHolder.textView.setText(data);
+        rowViewHolder.titleTextView.setText(data);
     }
 }

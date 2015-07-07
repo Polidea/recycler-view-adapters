@@ -28,7 +28,7 @@ public class GridAdapter extends BaseRecyclerViewAdapter<RowViewHolder>{
 
     @Override
     protected void onBindDataViewHolder(RowViewHolder holder, int dataPosition) {
-        holder.textView.setText(stringList.get(dataPosition));
+        holder.titleTextView.setText(stringList.get(dataPosition));
     }
 
     @Override

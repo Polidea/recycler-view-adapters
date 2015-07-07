@@ -79,13 +79,13 @@ public class StaggeredAdapter extends BaseSectionRecyclerViewAdapter {
     @Override
     protected void onBindSectionHeaderViewHolder(RecyclerView.ViewHolder holder, int section) {
         HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
-        headerViewHolder.textView.setText("Section " + section);
+        headerViewHolder.titleTextView.setText("Section " + section);
     }
 
     @Override
     protected void onBindRowViewHolder(RecyclerView.ViewHolder holder, IndexPath indexPath) {
         RowViewHolder rowViewHolder = (RowViewHolder) holder;
-        rowViewHolder.textView.setText(stringList.get(indexPath.getRow()));
+        rowViewHolder.titleTextView.setText(stringList.get(indexPath.getRow()));
     }
 
     @Override
