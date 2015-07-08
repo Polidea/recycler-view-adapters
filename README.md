@@ -1,6 +1,6 @@
 # Extended RecyclerView Adapters
 
-Library contains set of custom RecycleView Adapters that extending base adapter functionality.
+The library contains a set of custom RecycleView Adapters that extend base adapter functionality.
 
 Demo using `BaseStickySectionRecyclerViewAdapter`
 
@@ -49,15 +49,15 @@ Add library:
 </dependency>
 ```
 
-**It is a stable version of library**
+**This is a stable version of the library**
 
 ### BaseRecyclerViewAdapter
 
-Extended `RecyclerView.Adapter` that contains few new features:
+Extended `RecyclerView.Adapter` that contains a couple new features:
 
 - Infinite scrolling - Adds loading spinner at the end of the list and informs when user reaches the last adapter item.
-- Bottom content inset - Adds an empty item with specified height at the end of the list
-- Top content inset - Adds an empty item with specified height at the beginning of the list
+- Bottom content inset - Adds an empty item with specified height at the end of the list.
+- Top content inset - Adds an empty item with specified height at the beginning of the list.
 
 #### Usage
 
@@ -134,7 +134,7 @@ You don't have to do anything with StaggeredGridLayoutManager. `BaseRecyclerView
 
 ### BaseSectionRecyclerViewAdapter
 
-Extended `BaseRecyclerViewAdapter` that adds abstraction for grouping items in specified sections. Implementation is very similar to iOS UITableView.
+The extended `BaseRecyclerViewAdapter` adds abstraction for grouping items in specified sections. Implementation is very similar to iOS UITableView.
 
 #### Usage
 
