@@ -56,8 +56,8 @@ Add library:
 Extended `RecyclerView.Adapter` that contains few new features:
 
 - Infinite scrolling - Adds loading spinner at the end of the list and informs when user reaches the last adapter item.
-- Bottom content inset - Adds an empty item with specified height at the beginning and at the end of the list
-- Top content inset - Adds an empty item with specified height at the beginning and at the begin of the list
+- Bottom content inset - Adds an empty item with specified height at the end of the list
+- Top content inset - Adds an empty item with specified height at the beginning of the list
 
 #### Usage
 
